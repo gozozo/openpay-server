@@ -1,0 +1,21 @@
+{
+    "name": "gozozo/openpay-server",
+    "description": "This is a server implementing the payment services for Openpay at openpay.mx",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Luis Enrique Vazquez Escobar",
+            "email": "luis.vazquez@irondev.com.mx"
+        }
+    ],
+    "minimum-stability": "dev",
+    "autoload":{
+        "psr-4": {
+           "Gozozo\\OpenpayServer\\": "src/"
+        }
+    },
+    "require":{
+       "illuminate/support":"~5"
+    }
+}
