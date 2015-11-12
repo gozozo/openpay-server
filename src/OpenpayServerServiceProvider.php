@@ -13,7 +13,9 @@ class OpenpayServerServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        if (! $this->app->routesAreCached()) {
+            require __DIR__ . '/Http/routes.php';
+        }
     }
 
     /**
