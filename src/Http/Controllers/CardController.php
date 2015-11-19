@@ -2,34 +2,30 @@
 
 namespace Gozozo\OpenpayServer\Http\Controllers;
 
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 
-require_once(__DIR__.'/../../openpay-php/Openpay.php');
+require_once(__DIR__ . '/../../openpay-php/Openpay.php');
 
 use Openpay;
 
-class CardsController extends Controller
+class CardController extends Controller
 {
 
-    protected  $openpay;
+    protected $openpay;
+
     /**
-     * CardsController constructor
+     * CardController constructor
      */
     public function __construct()
     {
-        $openpay = Openpay::getInstance(env('OPENPAY_ID'),env('OPENPAY_SK'));
-
-        /*
-            $chargeData = array(
-                'method' => 'card',
-                'source_id' => $request->get('token_id'),
-                'amount' => (float)$request->get('amount'),
-                'description' => $request->get('description"'),
-                'use_card_points' => $request->get('use_card_points'), // Opcional, si estamos usando puntos
-                'device_session_id' => $request->get('deviceIdHiddenFieldName"));
-
-            */
+        if (getenv('APP_ENV') === 'production') {
+            Openpay::setProductionMode(true);
+            $this->openpay = Openpay::getInstance(env('OPENPAY_ID_PRODUCTION'), env('OPENPAY_SK_PRODUCTION'));
+        } else {
+            Openpay::setProductionMode(false);
+            $this->openpay = Openpay::getInstance(env('OPENPAY_ID'), env('OPENPAY_SK'));
+        }
     }
 
     /**
@@ -55,7 +51,7 @@ class CardsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  Request  $request
+     * @param  Request $request
      * @return Response
      */
     public function store(Request $request)
@@ -66,7 +62,7 @@ class CardsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return Response
      */
     public function show($id)
@@ -76,7 +72,7 @@ class CardsController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return Response
      */
     public function edit($id)
@@ -87,8 +83,8 @@ class CardsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  Request  $request
-     * @param  int  $id
+     * @param  Request $request
+     * @param  int $id
      * @return Response
      */
     public function update(Request $request, $id)
@@ -99,7 +95,7 @@ class CardsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return Response
      */
     public function destroy($id)
