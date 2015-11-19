@@ -13,6 +13,12 @@ Después agregar la siguiente línea  en ```provider``` en el archivo que se enc
 
 ```Gozozo\OpenpayServer\OpenpayServerServiceProvider::class,```
 
+y luego ejecutamos los siguintes comandos
+
+```php artisan vendor:publish --provider="Gozozo\OpenpayServer\OpenpayServerServiceProvider"```
+
+```php artisan migrate```
+
 ##Configuración de .env
 ###Configurar middleware 
 
