@@ -11,5 +11,7 @@
 */
 
 Route::group(["prefix" => '/openpay', "middleware" => env("MIDDLEWARE_OPENPAY")], function () {
-    Route::resource('/cards', 'Gozozo\OpenpayServer\Http\Controllers\CardsController');
+    Route::resource('/card', 'Gozozo\OpenpayServer\Http\Controllers\CardController', ['only' => ['store', 'destroy']]);
+    Route::resource('/customer', 'Gozozo\OpenpayServer\Http\Controllers\CustomerController', ['only' => ['store', 'destroy']]);
+    Route::resource('customer.card', 'Gozozo\OpenpayServer\Http\Controllers\CustomerCardController',['only' => ['index','store','destroy']]);
 });
