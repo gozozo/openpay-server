@@ -49,7 +49,9 @@ class CustomerCardController extends Controller
             $cardList = $customer->cards->getList($findDataRequest);
             $data =array();
             foreach($cardList as $card){
-                array_push($data,$card->serializableData);
+                $cardData=$card->serializableData;
+                $cardData["id"]=$card->id;
+                array_push($data,$cardData);
             }
             return response()->json($data);
 
