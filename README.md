@@ -47,3 +47,11 @@ Relación de la tabla de referencia openpay con tu tabla de usuarios. Dejar sin 
 OPENPAY_TABLE = <Tabla_usuario>
 OPENPAY_REFERENCE = <Id_tabla_usuario>
 ```
+
+##Activar modo producción 
+
+Es necesario asignar a la variable de `APP_ENV`  que se encuentra en nuestro archivo **.env** a **production**
+```txt
+APP_ENV = production
+```
+
