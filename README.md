@@ -1,4 +1,4 @@
-# Openpay Server PHP
+# Openpay Server PHP - Laravel
 
 Implementación de los servicios de Openpay 
 
@@ -6,22 +6,23 @@ Implementación de los servicios de Openpay
 
 Ejecutar el siguiente comando
 
-**`composer require gozozo/openpay-server`**
-
-Después agregar la siguiente línea  en **`provider`** en el archivo que se encuentra en **`config/app.php`**
+```console
+composer require gozozo/openpay-server
+```
+Después agregar la siguiente línea  en **`provider`** en el archivo que se encuentra en **`config/app.php`** del proyecto
 
 ```php
 Gozozo\OpenpayServer\OpenpayServerServiceProvider::class,
 ```
 
-y luego ejecutamos los siguintes comandos
+y luego ejecutamos los siguintes dos comandos en la terminal
 ```console
 php artisan vendor:publish --provider="Gozozo\OpenpayServer\OpenpayServerServiceProvider"
 php artisan migrate
 ```
 
 ##Configuración de .env
-Es necesario agregar las siguientes configuraciones
+Es necesario agregar las siguientes configuraciones en el archivo **.env** del proyecto de **Laravel**
 
 ###Configurar middleware 
 
