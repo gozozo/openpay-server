@@ -13,7 +13,7 @@
 $attr=["prefix" => '/openpay'];
 
 if(env("OPENPAY_MIDDLEWARE") !=="") {
-    array_add($attr, "middleware", env("OPENPAY_MIDDLEWARE"));
+    $attr["middleware"]=env("OPENPAY_MIDDLEWARE");
 }
 
 Route::group($attr, function () {
