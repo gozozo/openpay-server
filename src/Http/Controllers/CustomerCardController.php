@@ -38,7 +38,7 @@ class CustomerCardController extends Controller
      */
     public function index($customerId)
     {
-
+        //TODO Create dynamic values
         $findDataRequest = array(
             'creation[lte]' => '2015-12-31',
             'offset' => 0,
@@ -61,10 +61,12 @@ class CustomerCardController extends Controller
             $cardList = $customer->cards->getList($findDataRequest);
 
             $data = array();
-
+            //TODO Create dynamic values
             foreach ($cardList as $card) {
-                $cardData = $card->serializableData;
+                $cardData = array();
+                $cardData["card_number"] = $card->card_number;
                 $cardData["id"] = $card->id;
+                $cardData["brand"] = $card->brand;
                 array_push($data, $cardData);
             }
 
