@@ -42,7 +42,7 @@ class CustomerController extends Controller
             $customerData = json_decode($request->get('parameters'), true);
 
             //Check if not exist user
-            $openpayReference = OpenpayReferenceModel::where('user_id', $request->get('user_id'))->first();
+            $openpayReference = OpenpayReferenceModel::where('user_id', $customerData['external_id'])->first();
             if ($openpayReference != null) {
                 return response()->json(
                     array("response" => "error",
@@ -59,7 +59,7 @@ class CustomerController extends Controller
 
             //Save data to our server
             $openpayReference = new OpenpayReferenceModel();
-            $openpayReference->user_id = $request->get('user_id');
+            $openpayReference->user_id = $customerData['external_id'];
             $openpayReference->openpay_id = $customer->id;
             $openpayReference->save();
 
