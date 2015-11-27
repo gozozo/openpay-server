@@ -32,7 +32,8 @@ class CustomerCardController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  string $customerId ,
+     * @param  string $customerId
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function index($customerId)
@@ -46,7 +47,16 @@ class CustomerCardController extends Controller
         try {
 
             $openpayReference = OpenpayReferenceModel::where('user_id', $customerId)->first();
-
+            if ($openpayReference == null) {
+                return response()->json(
+                    array("response" => "error",
+                        "class" => "CustomerControllerError",
+                        "error" => array(
+                            "code" => 101,
+                            "message" => "Customer doesn't exist"
+                        ))
+                );
+            }
             $customer = $this->openpay->customers->get($openpayReference->openpay_id);
             $cardList = $customer->cards->getList($findDataRequest);
 
@@ -86,6 +96,8 @@ class CustomerCardController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  Request $request
+     * @param string $customerId
+     *
      * @return \Illuminate\Http\JsonResponse
      */
 
@@ -94,7 +106,19 @@ class CustomerCardController extends Controller
         try {
 
             $cardData = json_decode($request->get('parameters'), true);
+
             $openpayReference = OpenpayReferenceModel::where('user_id', $customerId)->first();
+
+            if ($openpayReference == null) {
+                return response()->json(
+                    array("response" => "error",
+                        "class" => "CustomerControllerError",
+                        "error" => array(
+                            "code" => 101,
+                            "message" => "Customer doesn't exist"
+                        ))
+                );
+            }
 
             $customer = $this->openpay->customers->get($openpayReference->openpay_id);
             $card = $customer->cards->add($cardData);
@@ -125,7 +149,9 @@ class CustomerCardController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  string $customerId , int $cardId
+     * @param  string $customerId ,
+     * @param int $cardId
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function destroy($customerId, $cardId)
@@ -133,6 +159,16 @@ class CustomerCardController extends Controller
         try {
 
             $openpayReference = OpenpayReferenceModel::where('user_id', $customerId)->first();
+            if ($openpayReference == null) {
+                return response()->json(
+                    array("response" => "error",
+                        "class" => "CustomerControllerError",
+                        "error" => array(
+                            "code" => 101,
+                            "message" => "Customer doesn't exist"
+                        ))
+                );
+            }
 
             $customer = $this->openpay->customers->get($openpayReference->openpay_id);
             $card = $customer->cards->get($cardId);

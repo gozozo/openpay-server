@@ -33,6 +33,7 @@ class CardChargeController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  Request $request string $cardId
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request, $cardId)
@@ -41,6 +42,16 @@ class CardChargeController extends Controller
 
             $chargeData = json_decode($request->get('parameters'), true);
             $openpayReference = OpenpayReferenceModel::where('user_id', $request->get("user_id"))->first();
+            if ($openpayReference == null) {
+                return response()->json(
+                    array("response" => "error",
+                        "class" => "CustomerControllerError",
+                        "error" => array(
+                            "code" => 101,
+                            "message" => "Customer doesn't exist"
+                        ))
+                );
+            }
 
             $customer = $this->openpay->customers->get($openpayReference->openpay_id);
             $charge = $customer->charges->create($chargeData);

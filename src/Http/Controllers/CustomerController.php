@@ -101,10 +101,20 @@ class CustomerController extends Controller
 
             //Delete data to our server
             $openpayReference = OpenpayReferenceModel::where('openpay_id', $customerId)->first();
-            if ($openpayReference != null) {
+            if ($openpayReference == null) {
+                return response()->json(
+                    array("response" => "error",
+                        "class" => "CustomerControllerError",
+                        "error" => array(
+                            "code" => 101,
+                            "message" => "Customer doesn't exist"
+                        ))
+                );
+            }else{
                 $openpayReference->delete();
+                return response()->json(array("response" => "ok"));
             }
-            return response()->json(array("response" => "ok"));
+
 
         } catch (\OpenpayApiError $e) {
             return response()->json(
