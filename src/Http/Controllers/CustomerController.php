@@ -37,16 +37,25 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-        $customerData = json_decode($request->get('parameters'), true);
-
         try {
+
+            $customerData = json_decode($request->get('parameters'), true);
+
+            //Check if not exist user
+            $openpayReference = OpenpayReferenceModel::where('user_id', $request->get('user_id'))->first();
+            if ($openpayReference != null) {
+                $customer = $this->openpay->customers->get($openpayReference->openpay_id);
+                return response()->json(array("response" => "result", "result" => $customer->serializableData));
+            }
+
+            //Add new Customer
             $customer = $this->openpay->customers->add($customerData);
 
             //Save data to our server
-            $openpayReferenceModel = new OpenpayReferenceModel();
-            $openpayReferenceModel->user_id = $request->get('user_id');
-            $openpayReferenceModel->openpay_id = $customer->id;
-            $openpayReferenceModel->save();
+            $openpayReference = new OpenpayReferenceModel();
+            $openpayReference->user_id = $request->get('user_id');
+            $openpayReference->openpay_id = $customer->id;
+            $openpayReference->save();
 
             return response()->json(array("response" => "result", "result" => $customer->serializableData));
 
@@ -64,7 +73,7 @@ class CustomerController extends Controller
                 array("response" => "error",
                     "class" => get_class($e),
                     "error" => array(
-                        "code" => $e->getErrorCode(),
+                        "code" => $e->getCode(),
                         "message" => $e->getMessage()
                     ))
             );
@@ -80,6 +89,7 @@ class CustomerController extends Controller
     public function destroy($customerId)
     {
         try {
+
             $customer = $this->openpay->customers->get($customerId);
             $customer->delete();
 
@@ -104,7 +114,7 @@ class CustomerController extends Controller
                 array("response" => "error",
                     "class" => get_class($e),
                     "error" => array(
-                        "code" => $e->getErrorCode(),
+                        "code" => $e->getCode(),
                         "message" => $e->getMessage()
                     ))
             );

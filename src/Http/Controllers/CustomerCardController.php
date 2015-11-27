@@ -32,12 +32,11 @@ class CustomerCardController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  string $customerId,
+     * @param  string $customerId ,
      * @return \Illuminate\Http\JsonResponse
      */
     public function index($customerId)
     {
-        $openpayReference = OpenpayReferenceModel::where('user_id', $customerId)->first();
 
         $findDataRequest = array(
             'creation[lte]' => '2015-12-31',
@@ -46,20 +45,22 @@ class CustomerCardController extends Controller
 
         try {
 
+            $openpayReference = OpenpayReferenceModel::where('user_id', $customerId)->first();
+
             $customer = $this->openpay->customers->get($openpayReference->openpay_id);
             $cardList = $customer->cards->getList($findDataRequest);
 
-            $data =array();
+            $data = array();
 
-            foreach($cardList as $card){
-                $cardData=$card->serializableData;
-                $cardData["id"]=$card->id;
-                array_push($data,$cardData);
+            foreach ($cardList as $card) {
+                $cardData = $card->serializableData;
+                $cardData["id"] = $card->id;
+                array_push($data, $cardData);
             }
 
-            return response()->json(array("response" => "result", "result" =>$data));
+            return response()->json(array("response" => "result", "result" => $data));
 
-        }catch (\OpenpayApiError $e) {
+        } catch (\OpenpayApiError $e) {
             return response()->json(
                 array(
                     "response" => "error",
@@ -73,7 +74,7 @@ class CustomerCardController extends Controller
                 array("response" => "error",
                     "class" => get_class($e),
                     "error" => array(
-                        "code" => $e->getErrorCode(),
+                        "code" => $e->getCode(),
                         "message" => $e->getMessage()
                     ))
             );
@@ -90,10 +91,10 @@ class CustomerCardController extends Controller
 
     public function store(Request $request, $customerId)
     {
-        $cardData=json_decode($request->get('parameters'),true);
-        $openpayReference = OpenpayReferenceModel::where('user_id', $customerId)->first();
-
         try {
+
+            $cardData = json_decode($request->get('parameters'), true);
+            $openpayReference = OpenpayReferenceModel::where('user_id', $customerId)->first();
 
             $customer = $this->openpay->customers->get($openpayReference->openpay_id);
             $card = $customer->cards->add($cardData);
@@ -114,7 +115,7 @@ class CustomerCardController extends Controller
                 array("response" => "error",
                     "class" => get_class($e),
                     "error" => array(
-                        "code" => $e->getErrorCode(),
+                        "code" => $e->getCode(),
                         "message" => $e->getMessage()
                     ))
             );
@@ -124,14 +125,14 @@ class CustomerCardController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  string $customerId, int $cardId
+     * @param  string $customerId , int $cardId
      * @return \Illuminate\Http\JsonResponse
      */
     public function destroy($customerId, $cardId)
     {
-        $openpayReference = OpenpayReferenceModel::where('user_id', $customerId)->first();
-
         try {
+
+            $openpayReference = OpenpayReferenceModel::where('user_id', $customerId)->first();
 
             $customer = $this->openpay->customers->get($openpayReference->openpay_id);
             $card = $customer->cards->get($cardId);
@@ -153,7 +154,7 @@ class CustomerCardController extends Controller
                 array("response" => "error",
                     "class" => get_class($e),
                     "error" => array(
-                        "code" => $e->getErrorCode(),
+                        "code" => $e->getCode(),
                         "message" => $e->getMessage()
                     ))
             );

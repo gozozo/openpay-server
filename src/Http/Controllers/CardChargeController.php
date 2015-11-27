@@ -35,17 +35,17 @@ class CardChargeController extends Controller
      * @param  Request $request string $cardId
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request,$cardId)
+    public function store(Request $request, $cardId)
     {
-        $chargeData=json_decode($request->get('parameters'),true);
-        $openpayReference = OpenpayReferenceModel::where('user_id', $request->get("user_id"))->first();
+        try {
 
-        try{
+            $chargeData = json_decode($request->get('parameters'), true);
+            $openpayReference = OpenpayReferenceModel::where('user_id', $request->get("user_id"))->first();
 
             $customer = $this->openpay->customers->get($openpayReference->openpay_id);
             $charge = $customer->charges->create($chargeData);
 
-            return response()->json(array("response" => "result", "result" =>$charge->serializableData));
+            return response()->json(array("response" => "result", "result" => $charge->serializableData));
 
         } catch (\OpenpayApiError $e) {
             return response()->json(
@@ -61,7 +61,7 @@ class CardChargeController extends Controller
                 array("response" => "error",
                     "class" => get_class($e),
                     "error" => array(
-                        "code" => $e->getErrorCode(),
+                        "code" => $e->getCode(),
                         "message" => $e->getMessage()
                     ))
             );
