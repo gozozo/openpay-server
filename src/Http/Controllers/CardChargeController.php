@@ -30,34 +30,41 @@ class CardChargeController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
-     *
-     *
-     * * @param  string $cardId
-     * @return Response
-     */
-    public function index($cardId)
-    {
-
-    }
-
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  Request $request string $cardId
-     * @return Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request,$cardId)
     {
         $chargeData=json_decode($request->get('parameters'),true);
         $openpayReference = OpenpayReferenceModel::where('user_id', $request->get("user_id"))->first();
+
         try{
+
             $customer = $this->openpay->customers->get($openpayReference->openpay_id);
             $charge = $customer->charges->create($chargeData);
-            return response()->json($charge->serializableData);
+
+            return response()->json(array("response" => "result", "result" =>$charge->serializableData));
+
+        } catch (\OpenpayApiError $e) {
+            return response()->json(
+                array(
+                    "response" => "error",
+                    "class" => get_class($e),
+                    "error" => array(
+                        "code" => $e->getErrorCode(), "message" => $e->getMessage(),
+                        "http_code" => $e->getHttpCode(), "category" => $e->getCategory()
+                    )));
         } catch (\Exception $e) {
-            return response()->json($e);
+            return response()->json(
+                array("response" => "error",
+                    "class" => get_class($e),
+                    "error" => array(
+                        "code" => $e->getErrorCode(),
+                        "message" => $e->getMessage()
+                    ))
+            );
         }
     }
 

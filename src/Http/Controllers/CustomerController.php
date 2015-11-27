@@ -30,103 +30,84 @@ class CustomerController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
-     *
-     * @return Response
-     */
-    public function index()
-    {
-
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  Request $request
-     * @return Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request)
     {
-        $customerData=json_decode($request->get('parameters'),true);
+        $customerData = json_decode($request->get('parameters'), true);
 
         try {
             $customer = $this->openpay->customers->add($customerData);
 
             //Save data to our server
-            $openpayReferenceModel =new OpenpayReferenceModel();
-            $openpayReferenceModel->user_id=$request->get('user_id');
-            $openpayReferenceModel->openpay_id=$customer->id;
+            $openpayReferenceModel = new OpenpayReferenceModel();
+            $openpayReferenceModel->user_id = $request->get('user_id');
+            $openpayReferenceModel->openpay_id = $customer->id;
             $openpayReferenceModel->save();
 
-            return response()->json($customer->serializableData);
+            return response()->json(array("response" => "result", "result" => $customer->serializableData));
 
         } catch (\OpenpayApiError $e) {
-            return response()->json($e);
+            return response()->json(
+                array(
+                    "response" => "error",
+                    "class" => get_class($e),
+                    "error" => array(
+                        "code" => $e->getErrorCode(), "message" => $e->getMessage(),
+                        "http_code" => $e->getHttpCode(), "category" => $e->getCategory()
+                    )));
+        } catch (\Exception $e) {
+            return response()->json(
+                array("response" => "error",
+                    "class" => get_class($e),
+                    "error" => array(
+                        "code" => $e->getErrorCode(),
+                        "message" => $e->getMessage()
+                    ))
+            );
         }
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int $id
-     * @return Response
-     */
-    public function show($id)
-    {
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int $id
-     * @return Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  Request $request
-     * @param  int $id
-     * @return Response
-     */
-    public function update(Request $request, $id)
-    {
-
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  string $customerId
-     * @return Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy($customerId)
     {
-        //
         try {
             $customer = $this->openpay->customers->get($customerId);
             $customer->delete();
 
             //Delete data to our server
             $openpayReference = OpenpayReferenceModel::where('openpay_id', $customerId)->first();
-            $openpayReference->delete();;
+            if ($openpayReference != null) {
+                $openpayReference->delete();
+            }
+            return response()->json(array("response" => "ok"));
 
         } catch (\OpenpayApiError $e) {
-            return response()->json($e);
+            return response()->json(
+                array(
+                    "response" => "error",
+                    "class" => get_class($e),
+                    "error" => array(
+                        "code" => $e->getErrorCode(), "message" => $e->getMessage(),
+                        "http_code" => $e->getHttpCode(), "category" => $e->getCategory()
+                    )));
+        } catch (\Exception $e) {
+            return response()->json(
+                array("response" => "error",
+                    "class" => get_class($e),
+                    "error" => array(
+                        "code" => $e->getErrorCode(),
+                        "message" => $e->getMessage()
+                    ))
+            );
         }
     }
 }
