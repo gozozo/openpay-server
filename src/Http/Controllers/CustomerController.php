@@ -44,8 +44,14 @@ class CustomerController extends Controller
             //Check if not exist user
             $openpayReference = OpenpayReferenceModel::where('user_id', $request->get('user_id'))->first();
             if ($openpayReference != null) {
-                $customer = $this->openpay->customers->get($openpayReference->openpay_id);
-                return response()->json(array("response" => "result", "result" => $customer->serializableData));
+                return response()->json(
+                    array("response" => "error",
+                        "class" => "CustomerControllerError",
+                        "error" => array(
+                            "code" => 100,
+                            "message" => "Customer exist"
+                        ))
+                );
             }
 
             //Add new Customer
