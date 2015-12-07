@@ -36,12 +36,12 @@ class CardChargeController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request, $cardId)
+    public function store(Request $request, $customerId, $cardId)
     {
         try {
 
             $chargeData = json_decode($request->get('parameters'), true);
-            $openpayReference = OpenpayReferenceModel::where('user_id', $request->get("user_id"))->first();
+            $openpayReference = OpenpayReferenceModel::where('user_id', $customerId)->first();
             if ($openpayReference == null) {
                 return response()->json(
                     array("response" => "error",
