@@ -5,6 +5,7 @@ namespace Gozozo\OpenpayServer\Http\Controllers;
 use Gozozo\OpenpayServer\Models\OpenpayReferenceModel;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Carbon\Carbon;
 
 require_once(__DIR__ . '/../../openpay-php/Openpay.php');
 
@@ -40,7 +41,7 @@ class CustomerCardController extends Controller
     {
         //TODO Create dynamic values
         $findDataRequest = array(
-            'creation[lte]' => '2015-12-31',
+            'creation[lte]' => Carbon::today()->addDay(1)->toDateString(),
             'offset' => 0,
             'limit' => 100);
 
