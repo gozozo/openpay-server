@@ -56,7 +56,7 @@ class CardChargeController extends Controller
             $customer = $this->openpay->customers->get($openpayReference->openpay_id);
             $charge = $customer->charges->create($chargeData);
 
-            return response()->json(array("response" => "result", "result" => $charge->serializableData));
+            return response()->json(array("response" => "result", "result" =>$this->responseArray($charge) ));
 
         } catch (\OpenpayApiError $e) {
             return response()->json(
@@ -78,5 +78,18 @@ class CardChargeController extends Controller
             );
         }
     }
-
+    public function responseArray($class)
+    {
+        if(get_class($class) == 'OpenpayCharge'){
+            $data = array();
+            $data = $class->serializableData;
+            $data['card']=$class->card->serializableData;
+            $data['fee']=$class->fee->serializableData;
+            if(isset($class->exchange_rate)){
+                $data['exchange_rate']=$class->exchange_rate->serializableData;
+            }
+            return $data;
+        }
+        return null;
+    }
 }
