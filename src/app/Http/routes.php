@@ -10,10 +10,12 @@
 |
 */
 
+use Illuminate\Support\Facades\Route;
+
 $attr=["prefix" => 'api/v1/openpay'];
 
-if(env("OPENPAY_MIDDLEWARE") !=="") {
-    $attr["middleware"]=env("OPENPAY_MIDDLEWARE");
+if(env("OPENPAY_API_MIDDLEWARE") !== "") {
+    $attr["middleware"]=env("OPENPAY_API_MIDDLEWARE");
 }
 
 Route::group($attr, function () {
