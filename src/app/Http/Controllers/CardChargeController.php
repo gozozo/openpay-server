@@ -5,10 +5,7 @@ namespace Gozozo\OpenpayServer\Http\Controllers;
 use Gozozo\OpenpayServer\Models\OpenpayReferenceModel;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-
-require_once(__DIR__ . '/../../openpay-php/Openpay.php');
-
-use Openpay;
+use OpenpayApi;
 
 class CardChargeController extends Controller
 {
@@ -16,17 +13,12 @@ class CardChargeController extends Controller
     protected $openpay;
 
     /**
-     * CardController constructor
-     */
-    public function __construct()
+ * CardController constructor
+ * @param OpenpayApi $openpay
+ */
+    public function __construct(OpenpayApi $openpay)
     {
-        if (getenv('APP_ENV') === 'production') {
-            Openpay::setProductionMode(true);
-            $this->openpay = Openpay::getInstance(env('OPENPAY_ID_PRODUCTION'), env('OPENPAY_SK_PRODUCTION'));
-        } else {
-            Openpay::setProductionMode(false);
-            $this->openpay = Openpay::getInstance(env('OPENPAY_ID'), env('OPENPAY_SK'));
-        }
+        $this->openpay=  $openpay;
     }
 
     /**

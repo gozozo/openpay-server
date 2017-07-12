@@ -12,8 +12,11 @@
     "minimum-stability": "dev",
     "autoload":{
         "psr-4": {
-            "Gozozo\\OpenpayServer\\": "src/"
-        }
+            "Gozozo\\OpenpayServer\\": "src/app"
+        },
+        "files": [
+            "../../openpay/sdk/Openpay.php"
+        ]
     },
     "require":{
         "php": ">=5.6"
