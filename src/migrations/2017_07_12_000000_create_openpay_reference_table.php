@@ -32,9 +32,11 @@ class CreateOpenpayReferenceTable extends Migration
      */
     public function down()
     {
-        Schema::table('openpay_reference', function (Blueprint $table) {
-            $table->dropForeign('openpay_reference_user_id_foreign');
-        });
+        if(env('OPENPAY_REFERENCE') !=='' && env('OPENPAY_TABLE') !== ''){
+            Schema::table('openpay_reference', function (Blueprint $table) {
+                $table->dropForeign('openpay_reference_user_id_foreign');
+            });
+        }
         Schema::dropIfExists('openpay_reference');
     }
 }

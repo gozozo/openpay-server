@@ -12,14 +12,17 @@
 
 use Illuminate\Support\Facades\Route;
 
-$attr=["prefix" => 'api/v1/openpay'];
 
-if(env("OPENPAY_API_MIDDLEWARE") !== "") {
-    $attr["middleware"]=env("OPENPAY_API_MIDDLEWARE");
+if(config('openpay.api')) {
+    $attr = ["prefix" => config('openpay.api_route')];
+
+    if (config('openpay.api_middleware') !== '') {
+        $attr["middleware"] = config('openpay.api_middleware');
+    }
+
+    Route::group($attr, function () {
+        Route::resource('/customer', 'Gozozo\OpenpayServer\Http\Controllers\Api\CustomerController', ['only' => ['store', 'destroy']]);
+        Route::resource('/customer.card', 'Gozozo\OpenpayServer\Http\Controllers\Api\CustomerCardController', ['only' => ['index', 'store', 'destroy']]);
+        Route::resource('/customer.card.charge', 'Gozozo\OpenpayServer\Http\Controllers\Api\CardChargeController', ['only' => ['store']]);
+    });
 }
-
-Route::group($attr, function () {
-    Route::resource('/customer', 'Gozozo\OpenpayServer\Http\Controllers\Api\CustomerController', ['only' => ['store', 'destroy']]);
-    Route::resource('/customer.card', 'Gozozo\OpenpayServer\Http\Controllers\Api\CustomerCardController',['only' => ['index','store','destroy']]);
-    Route::resource('/customer.card.charge', 'Gozozo\OpenpayServer\Http\Controllers\Api\CardChargeController',['only' => ['store']]);
-});
