@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\Schema;
 
 class CreateOpenpayReferenceTable extends Migration
 {
@@ -18,8 +19,8 @@ class CreateOpenpayReferenceTable extends Migration
             $table->string('openpay_id');
             $table->timestamps();
 
-            if(getenv('OPENPAY_REFERENCE') !=='' && getenv('OPENPAY_TABLE')){
-                $table->foreign("user_id")->references(getenv('OPENPAY_REFERENCE'))->on(getenv('OPENPAY_TABLE'));
+            if(env('OPENPAY_REFERENCE') !=='' && env('OPENPAY_TABLE') !== ''){
+                $table->foreign("user_id")->references(env('OPENPAY_REFERENCE'))->on(env('OPENPAY_TABLE'));
             }
         });
     }
@@ -31,6 +32,9 @@ class CreateOpenpayReferenceTable extends Migration
      */
     public function down()
     {
-        Schema::drop('openpay_reference');
+        Schema::table('openpay_reference', function (Blueprint $table) {
+            $table->dropForeign('openpay_reference_user_id_foreign');
+        });
+        Schema::dropIfExists('openpay_reference');
     }
 }

@@ -9,6 +9,8 @@ class OpenpayReferenceModel extends Model
 
     protected $table = "openpay_reference";
 
+    protected $fillable = ['user_id', 'openpay_id'];
+
     protected $primaryKey = "id";
 
 }

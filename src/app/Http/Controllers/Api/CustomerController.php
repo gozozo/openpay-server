@@ -3,6 +3,7 @@
 namespace Gozozo\OpenpayServer\Http\Controllers\Api;
 
 use Gozozo\OpenpayServer\Models\OpenpayReferenceModel;
+use Gozozo\OpenpayServer\Objects\OpenpayReference;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use OpenpayApi;
@@ -47,15 +48,16 @@ class CustomerController extends Controller
             }
 
             //Add new Customer
-            $customer = $this->openpay->customers->add($customerData);
+            $responseOpenpay = $this->openpay->customers->add($customerData);
 
             //Save data to our server
-            $openpayReference = new OpenpayReferenceModel();
-            $openpayReference->user_id = $customerData['external_id'];
-            $openpayReference->openpay_id = $customer->id;
-            $openpayReference->save();
+            $openpayReferenceO =  new OpenpayReference();
+            $openpayReferenceO->user_id=$responseOpenpay->external_id;
+            $openpayReferenceO->openpay_id =$responseOpenpay->id;
 
-            return response()->json(array("response" => "result", "result" => $customer->serializableData));
+            OpenpayReferenceModel::create($openpayReferenceO->toArray());
+
+            return response()->json(array("response" => "result", "result" => $responseOpenpay->serializableData));
 
         } catch (\OpenpayApiError $e) {
             return response()->json(
