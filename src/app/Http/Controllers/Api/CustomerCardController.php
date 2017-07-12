@@ -1,6 +1,6 @@
 <?php
 
-namespace Gozozo\OpenpayServer\Http\Controllers;
+namespace Gozozo\OpenpayServer\Http\Controllers\Api;
 
 use Gozozo\OpenpayServer\Models\OpenpayReferenceModel;
 use Illuminate\Http\Request;

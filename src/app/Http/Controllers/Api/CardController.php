@@ -1,6 +1,6 @@
 <?php
 
-namespace Gozozo\OpenpayServer\Http\Controllers;
+namespace Gozozo\OpenpayServer\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
