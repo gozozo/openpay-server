@@ -2,7 +2,7 @@
 
 Implementación de los servicios de Openpay 
 
-##Instalación
+## Instalación
 
 Ejecutar el siguiente comando
 
@@ -21,16 +21,16 @@ php artisan vendor:publish --provider="Gozozo\OpenpayServer\OpenpayServerService
 php artisan migrate
 ```
 
-##Configuración de .env
+## Configuración de .env
 Es necesario agregar las siguientes configuraciones en el archivo **.env** del proyecto de **Laravel**
 
-###Configurar middleware 
+### Configurar middleware 
 
 Permite una autenticación antes de acceder a las rutas de openpay
 ```
 OPENPAY_MIDDLEWARE=<Nombre_middleware>
 ```
-###Llaves del API de Openpay
+### Llaves del API de Openpay
 
 Configuración de las llaves 
 ```txt
@@ -38,7 +38,7 @@ OPENPAY_ID = <Id_de_pruebas>
 OPENPAY_SK = <Llave_privada_pruebas>
 ```
 
-###Tabla de referencia
+### Tabla de referencia
 
 Relación de la tabla de referencia openpay con tu tabla de usuarios. Dejar sin datos si no se desea relación
 ```txt
@@ -46,7 +46,7 @@ OPENPAY_TABLE = <Tabla_usuario>
 OPENPAY_REFERENCE = <Id_tabla_usuario>
 ```
 
-##Activar modo producción 
+## Activar modo producción 
 
 Es necesario asignar a la variable de `APP_ENV`  que se encuentra en nuestro archivo **.env** a **production**
 ```txt
