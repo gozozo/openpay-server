@@ -13,14 +13,11 @@ class OpenpayServerServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        if (! $this->app->routesAreCached()) {
-            require __DIR__ . '/Http/routes.php';
-
-            //Define the files which are going to be published
-            $this->publishes([
-                __DIR__.'/migrations/2015_11_19_000000_create_openpay_reference_table.php'=>base_path('database/migrations/2015_11_19_000000_create_openpay_reference_table.php')]
-            );
-        }
+        $this->loadRoutesFrom (__DIR__ . '/Http/routes.php');
+        $this->loadMigrationsFrom(__DIR__.'/migrations');
+        $this->publishes([
+            __DIR__ . '/config/openpay.php' => config_path('openpay.php')
+        ]);
     }
 
     /**
@@ -30,8 +27,7 @@ class OpenpayServerServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
-        $this->app->bind('openpay-server',function ($app){
+        $this->app->singleton(\OpenpayServer::class, function ($app) {
             return new OpenpayServer;
         });
     }
