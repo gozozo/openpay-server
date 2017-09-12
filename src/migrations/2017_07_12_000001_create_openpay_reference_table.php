@@ -15,8 +15,8 @@ class CreateOpenpayReferenceTable extends Migration
     {
         Schema::create('openpay_reference', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id')->unsigned();;
-            $table->string('openpay_id');
+            $table->integer('user_id')->unsigned();
+            $table->string('openpay_id',50);
             $table->timestamps();
 
             if(env('OPENPAY_REFERENCE') !=='' && env('OPENPAY_TABLE') !== ''){
