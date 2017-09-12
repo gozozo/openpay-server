@@ -7,10 +7,12 @@
 
 namespace Gozozo\OpenpayServer;
 
+use Gozozo\OpenpayServer\Models\OpenpayPayorderReferenceModel;
 use Gozozo\OpenpayServer\Models\OpenpayReferenceModel;
 use Gozozo\OpenpayServer\Objects\Card;
 use Gozozo\OpenpayServer\Objects\PayOrder;
 use OpenpayApi;
+use OpenpayCharge;
 
 class Openpay
 {
@@ -42,14 +44,35 @@ class Openpay
         return $customer->cards->add($creditCard->toArray());
     }
 
+    /***********************************************
+     *                 PAY ORDER
+     ***********************************************/
+
     /**
      * Create pay order.    Check documentation on https://www.openpay.mx/docs/api/?php#con-terminal-virtual
      *
+     * @param int $external_id      External id
      * @param PayOrder $payOrder
      * @return mixed
      */
-    public static  function  cretePayOrder(PayOrder $payOrder){
-        return Openpay::instance()->charges->create($payOrder->toArray());
+    public static  function  cretePayOrder($external_id, PayOrder $payOrder){
+        $response = Openpay::instance()->charges->create($payOrder->toArray());
+        $openpayPOR = new OpenpayPayorderReferenceModel;
+        $openpayPOR->user_id = $external_id;
+        $openpayPOR->openpay_id = $response->id;
+        $openpayPOR->save();
+        return true;
+    }
+
+    /**
+     * Get pay order.    Check documentation on https://www.openpay.mx/docs/api/?php#obtener-un-cargo
+     *
+     * @param String $transaction_id      Transaction id
+     * @return OpenpayCharge
+     */
+    public static  function  getPayOrder($transaction_id){
+        $response = Openpay::instance()->charges->get($transaction_id);
+        return $response;
     }
 
     /**
