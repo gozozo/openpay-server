@@ -55,7 +55,7 @@ class Openpay
      * @param PayOrder $payOrder
      * @return mixed
      */
-    public static  function  cretePayOrder($external_id, PayOrder $payOrder){
+    public static  function  createPayOrder($external_id, PayOrder $payOrder){
         $response = Openpay::instance()->charges->create($payOrder->toArray());
         $openpayPOR = new OpenpayPayorderReferenceModel;
         $openpayPOR->user_id = $external_id;

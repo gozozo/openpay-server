@@ -21,10 +21,12 @@ if(config('openpay.api')) {
     }
 
     Route::group($attr, function () {
-        Route::post('/webhook','Gozozo\OpenpayServer\Http\Controllers\Api\WebhookController@webhook')->name('webhook');
-        Route::get('/webhook/code','Gozozo\OpenpayServer\Http\Controllers\Api\WebhookController@code')->name('webhook.code');
         Route::resource('/customer', 'Gozozo\OpenpayServer\Http\Controllers\Api\CustomerController', ['only' => ['store', 'destroy']]);
         Route::resource('/customer.card', 'Gozozo\OpenpayServer\Http\Controllers\Api\CustomerCardController', ['only' => ['index', 'store', 'destroy']]);
         Route::resource('/customer.card.charge', 'Gozozo\OpenpayServer\Http\Controllers\Api\CardChargeController', ['only' => ['store']]);
     });
 }
+Route::group(["prefix" => 'openpay'], function () {
+    Route::post('webhook', 'Gozozo\OpenpayServer\Http\Controllers\WebhookController@webhook')->name('openpay.webhook');
+    Route::get('webhook/code', 'Gozozo\OpenpayServer\Http\Controllers\WebhookController@code')->name('openpay.webhook.code');
+});

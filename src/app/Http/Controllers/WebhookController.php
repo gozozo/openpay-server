@@ -1,6 +1,6 @@
 <?php
 
-namespace Gozozo\OpenpayServer\Http\Controllers\Api;
+namespace Gozozo\OpenpayServer\Http\Controllers;
 
 use Carbon\Carbon;
 use Gozozo\OpenpayServer\Models\OpenpayVerificationWebhookModel;
@@ -10,7 +10,6 @@ use Illuminate\Routing\Controller;
 class WebhookController extends Controller
 {
     public function webhook(Request $request){
-
         if($request->input('type') == 'verification'){
             $webhook = new OpenpayVerificationWebhookModel();
             $webhook->event_date = Carbon::parse($request->input('event_date'));
