@@ -6,6 +6,6 @@
         OpenPay.setId('{{config('openpay.id')}}');
         OpenPay.setApiKey('{{config('openpay.pk')}}');
         OpenPay.setSandboxMode({{config('openpay.sandbox')}});
-        var deviceSessionId = OpenPay.deviceData.setup("payment-form", "deviceIdHiddenFieldName");
+        var deviceSessionId = OpenPay.deviceData.setup("payment-form", "device_session_id");
     });
 </script>

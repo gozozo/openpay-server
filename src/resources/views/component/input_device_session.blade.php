@@ -1,0 +1,1 @@
+<input type="hidden" name="device_session_id" id="device_session_id">

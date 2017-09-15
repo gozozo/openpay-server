@@ -7,15 +7,54 @@
 
 namespace Gozozo\OpenpayServer;
 
-use Gozozo\OpenpayServer\Models\OpenpayPayorderReferenceModel;
 use Gozozo\OpenpayServer\Models\OpenpayReferenceModel;
 use Gozozo\OpenpayServer\Objects\Card;
+use Gozozo\OpenpayServer\Objects\Charge;
 use Gozozo\OpenpayServer\Objects\PayOrder;
 use OpenpayApi;
 use OpenpayCharge;
 
 class Openpay
 {
+    /**
+     * Get instance
+     *
+     * @return OpenpayApi
+     */
+    private static function instance(){
+        $instance = OpenpayApi::getInstance(null);
+        if(isset($instance)&& $instance->id !='' &&$instance->apiKey != ''){
+            return $instance;
+        }else{
+            \Openpay::setProductionMode(!config('openpay.sandbox'));
+            return \Openpay::getInstance(config('openpay.id'), config('openpay.sk'));
+        }
+    }
+
+    /***********************************************
+     *                 CHARGES
+     **********************************************/
+
+     /**
+     * Create customer charge. This type of charge requires a saved card or a previously generated token.   Check documentation on https://www.openpay.mx/docs/api/#con-id-de-tarjeta-o-token
+     *
+     * @param $external_id
+     * @param Charge $charge
+     *
+     * @return OpenpayCharge
+     */
+
+    public static function createCustomerCharge($external_id,Charge $charge)
+    {
+        $openpayReference = OpenpayReferenceModel::where('user_id', $external_id)->first();
+        $customer = Openpay::instance()->customers->get($openpayReference->openpay_id);
+        $charge = $customer->charges->create($charge->toArray());
+        return $charge;
+    }
+
+    /***********************************************
+     *                 CUSTOMERS
+     **********************************************/
 
     /**
      * Get all cards from a customer.   Check documentation on https://www.openpay.mx/docs/api/#listado-de-tarjetas
@@ -51,17 +90,12 @@ class Openpay
     /**
      * Create pay order.    Check documentation on https://www.openpay.mx/docs/api/?php#con-terminal-virtual
      *
-     * @param int $external_id      External id
      * @param PayOrder $payOrder
-     * @return mixed
+     * @return OpenpayCharge
      */
-    public static  function  createPayOrder($external_id, PayOrder $payOrder){
+    public static  function createPayOrder(PayOrder $payOrder){
         $response = Openpay::instance()->charges->create($payOrder->toArray());
-        $openpayPOR = new OpenpayPayorderReferenceModel;
-        $openpayPOR->user_id = $external_id;
-        $openpayPOR->openpay_id = $response->id;
-        $openpayPOR->save();
-        return true;
+        return $response;
     }
 
     /**
@@ -75,6 +109,10 @@ class Openpay
         return $response;
     }
 
+    /***********************************************
+     *                 COMMERCE
+     **********************************************/
+
     /**
      * Get all changes.     Check documentation on https://www.openpay.mx/docs/api/?php#listado-de-cargos
      *
@@ -85,18 +123,4 @@ class Openpay
         return Openpay::instance()->charges->getList($filter);
     }
 
-    /**
-     * Get instance
-     *
-     * @return OpenpayApi
-     */
-    private static function instance(){
-        $instance = OpenpayApi::getInstance(null);
-        if(isset($instance)&& $instance->id !='' &&$instance->apiKey != ''){
-            return $instance;
-        }else{
-            \Openpay::setProductionMode(!config('openpay.sandbox'));
-            return \Openpay::getInstance(config('openpay.id'), config('openpay.sk'));
-        }
-    }
 }

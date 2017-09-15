@@ -1,5 +1,6 @@
 <form action="#" method="POST" id="payment-form">
     <input type="hidden" name="token_id" id="token_id">
+    @include('openpay::component.input_device_session')
     <input type="hidden" name="use_card_points" id="use_card_points" value="false">
     <div class="pymnt-itm card active">
         <h2>Tarjeta de crédito o débito</h2>
