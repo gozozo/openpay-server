@@ -83,6 +83,7 @@ class Openpay
         return $customer->cards->add($creditCard->toArray());
     }
 
+
     /***********************************************
      *                 PAY ORDER
      ***********************************************/
@@ -98,17 +99,6 @@ class Openpay
         return $response;
     }
 
-    /**
-     * Get pay order.    Check documentation on https://www.openpay.mx/docs/api/?php#obtener-un-cargo
-     *
-     * @param String $transaction_id      Transaction id
-     * @return OpenpayCharge
-     */
-    public static  function  getPayOrder($transaction_id){
-        $response = Openpay::instance()->charges->get($transaction_id);
-        return $response;
-    }
-
     /***********************************************
      *                 COMMERCE
      **********************************************/
@@ -121,6 +111,21 @@ class Openpay
      */
     public static function allChargesFromCommerce(array $filter = []){
         return Openpay::instance()->charges->getList($filter);
+    }
+
+    /***********************************************
+     *                 Charge
+     **********************************************/
+    /**
+     * Get charge  to customer.    Check documentation on https://www.openpay.mx/docs/api/?php#crear-una-tarjeta
+     *
+     * @param string $transaction_id      Id Transaction;
+     * @return \OpenpayCard
+     * */
+    public static function getCharge($transaction_id)
+    {
+        $response = Openpay::instance()->charges->get($transaction_id);
+        return $response;
     }
 
 }
