@@ -17,6 +17,7 @@ class OpenpayServerServiceProvider extends ServiceProvider
         $this->loadRoutesFrom (__DIR__ . '/../app/Http/routes.php');
         $this->loadMigrationsFrom(__DIR__.'/../migrations');
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'openpay');
+        $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'openpay');
         $this->publishes([
             __DIR__ . '/../config/openpay.php' => config_path('openpay.php')
         ]);
