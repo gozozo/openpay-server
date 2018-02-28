@@ -21,7 +21,7 @@ class Openpay
      *
      * @return OpenpayApi
      */
-    private static function instance(){
+    public static function instance(){
         $instance = OpenpayApi::getInstance(null);
         if(isset($instance)&& $instance->id !='' &&$instance->apiKey != ''){
             return $instance;
