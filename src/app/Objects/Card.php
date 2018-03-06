@@ -13,11 +13,11 @@ class Card
 {
     use ActionObjects;
 
+    public $source_id;
     public $holder_name;
     public $card_number;
     public $cvv2;
     public $expiration_month;
     public $expiration_year;
     public $address;
-
 }
