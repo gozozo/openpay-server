@@ -6,6 +6,11 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class CardTokenForm extends FormRequest
 {
+    const RULES = [
+        'token_id' => 'required',
+        'device_session_id' => 'required',
+    ];
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -23,9 +28,6 @@ class CardTokenForm extends FormRequest
      */
     public function rules()
     {
-        return [
-            'token_id' => 'required',
-            'device_session_id' => 'required',
-        ];
+        return self::RULES;
     }
 }
