@@ -13,7 +13,9 @@ trait ActionObjects
     function create ($array){
         foreach ($array as $key => $value)
         {
-            $this->$key = $value;
+            if(property_exists($this,$key)){
+                $this->$key = $value;
+            }
         }
     }
 

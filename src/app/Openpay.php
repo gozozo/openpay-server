@@ -9,6 +9,7 @@ namespace Gozozo\OpenpayServer;
 
 use Gozozo\OpenpayServer\Models\OpenpayReferenceModel;
 use Gozozo\OpenpayServer\Objects\Card;
+use Gozozo\OpenpayServer\Objects\CardToken;
 use Gozozo\OpenpayServer\Objects\Charge;
 use Gozozo\OpenpayServer\Objects\PayOrder;
 use OpenpayApi;
@@ -81,6 +82,19 @@ class Openpay
         $openpayReference = OpenpayReferenceModel::where('user_id', $external_id)->first();
         $customer = Openpay::instance()->customers->get($openpayReference->openpay_id);
         return $customer->cards->add($creditCard->toArray());
+    }
+
+    /**
+     * Add card to customer.    Check documentation on https://www.openpay.mx/docs/api/?php#crear-una-tarjeta-con-token
+     *
+     * @param int $external_id      External id
+     * @param CardToken $cardToken      CardToken
+     * @return \OpenpayCard
+     */
+    public static function addCardTokenToCustomer($external_id, CardToken $cardToken){
+        $openpayReference = OpenpayReferenceModel::where('user_id', $external_id)->first();
+        $customer = Openpay::instance()->customers->get($openpayReference->openpay_id);
+        return $customer->cards->add($cardToken->toArray());
     }
 
 
