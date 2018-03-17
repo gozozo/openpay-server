@@ -39,7 +39,7 @@ return [
     |
     | This indicates the development environment
     */
-    'sandbox' => env('APP_ENV') !== 'production' ? 'true' : 'false',
+    'production' => env('OPENPAY_PRODUCTION_MODE',false),
 
     /*
     |--------------------------------------------------------------------------

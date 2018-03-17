@@ -27,7 +27,7 @@ class Openpay
         if(isset($instance)&& $instance->id !='' &&$instance->apiKey != ''){
             return $instance;
         }else{
-            \Openpay::setProductionMode(!config('openpay.sandbox'));
+            \Openpay::setProductionMode(config('openpay.production'));
             return \Openpay::getInstance(config('openpay.id'), config('openpay.sk'));
         }
     }
