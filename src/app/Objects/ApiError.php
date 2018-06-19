@@ -14,6 +14,7 @@ class ApiError
     use ActionObjects;
 
     public $category;
+    public $message;
     public $description;
     public $http_code;
     public $error_code;
@@ -26,6 +27,7 @@ class ApiError
     public function __construct(\OpenpayApiError $e)
     {
         $this->category = $e->getCategory();
+        $this->message= $e->getMessage();
         $this->description = __('openpay::errors.'.$e->getErrorCode());
         $this->http_code = $e->getHttpCode();
         $this->error_code = $e->getErrorCode();

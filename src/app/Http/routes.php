@@ -29,4 +29,6 @@ if(config('openpay.api')) {
 Route::group(["prefix" => 'openpay'], function () {
     Route::post('webhook', 'Gozozo\OpenpayServer\Http\Controllers\WebhookController@webhook')->name('openpay.webhook');
     Route::get('webhook/code', 'Gozozo\OpenpayServer\Http\Controllers\WebhookController@code')->name('openpay.webhook.code');
+    Route::get('payment/store/{id}','Gozozo\OpenpayServer\Http\Controllers\StoreController@storeReceipt')->name('openpay.store');
+    Route::get('payment/store/{id}/print','Gozozo\OpenpayServer\Http\Controllers\StoreController@storeReceiptPrint')->name('openpay.store.print');
 });

@@ -8,10 +8,12 @@
 namespace Gozozo\OpenpayServer;
 
 use Gozozo\OpenpayServer\Models\OpenpayReferenceModel;
+use Gozozo\OpenpayServer\Objects\BankPayment;
 use Gozozo\OpenpayServer\Objects\Card;
 use Gozozo\OpenpayServer\Objects\CardToken;
 use Gozozo\OpenpayServer\Objects\Charge;
 use Gozozo\OpenpayServer\Objects\PayOrder;
+use Gozozo\OpenpayServer\Objects\StorePayment;
 use OpenpayApi;
 use OpenpayCharge;
 
@@ -108,7 +110,7 @@ class Openpay
      * @param PayOrder $payOrder
      * @return OpenpayCharge
      */
-    public static  function createPayOrder(PayOrder $payOrder){
+    public static function createPayOrder(PayOrder $payOrder){
         $response = Openpay::instance()->charges->create($payOrder->toArray());
         return $response;
     }
@@ -134,12 +136,49 @@ class Openpay
      * Get charge  to customer.    Check documentation on https://www.openpay.mx/docs/api/?php#crear-una-tarjeta
      *
      * @param string $transaction_id      Id Transaction;
-     * @return \OpenpayCard
+     * @return \OpenpayCharge
      * */
     public static function getCharge($transaction_id)
     {
         $response = Openpay::instance()->charges->get($transaction_id);
         return $response;
+    }
+
+
+    /***********************************************
+     *                 STORE PAYMENTS
+     ***********************************************/
+
+    /**
+     * Create payment via a store.    Check documentation on https://www.openpay.mx/docs/api/?php#cargo-en-tienda
+     *
+     * @param $external_id
+     * @param StorePayment $storePayment
+     * @return OpenpayCharge
+     */
+    public static function createStorePayment($external_id,StorePayment $storePayment){
+        $openpayReference = OpenpayReferenceModel::where('user_id', $external_id)->first();
+        $customer = Openpay::instance()->customers->get($openpayReference->openpay_id);
+        $charge = $customer->charges->create($storePayment->toArray());
+        return $charge;
+    }
+
+    /***********************************************
+     *                 STORE BANK
+     ***********************************************/
+
+    /**
+     * Create charge via Bank.    Check documentation on https://www.openpay.mx/docs/api/?php#cargo-en-tienda
+     *
+     * @param $external_id
+     * @param BankPayment $bankPayment
+     * @return OpenpayCharge
+     */
+    public static function createBankPayment($external_id,BankPayment $bankPayment){
+        $openpayReference = OpenpayReferenceModel::where('user_id', $external_id)->first();
+        $customer = Openpay::instance()->customers->get($openpayReference->openpay_id);
+        $charge = $customer->charges->create($bankPayment->toArray());
+        return $charge;
     }
 
 }

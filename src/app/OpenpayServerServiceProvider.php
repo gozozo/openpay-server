@@ -21,6 +21,9 @@ class OpenpayServerServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/../config/openpay.php' => config_path('openpay.php')
         ]);
+        $this->publishes([
+            __DIR__.'/../resources/assets' => public_path('vendor/gozozo/openpay'),
+        ], 'public');
     }
 
     /**
