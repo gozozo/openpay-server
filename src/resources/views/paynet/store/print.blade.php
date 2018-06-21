@@ -235,7 +235,7 @@
         </div>
         <div class="col1">
             <h3>Fecha límite de pago</h3>
-            <h4>{{$charge->due_date==null?'No aplica' :\Carbon\Carbon::createFromFormat('Y-m-d\TH:i:sP', $charge->due_date)->formatLocalized('%d de %B %Y, a las %H:%m')}}</h4>
+            <h4>{{$charge->due_date==null?'No aplica' :\Carbon\Carbon::createFromFormat('Y-m-d\TH:i:sP', $charge->due_date)->formatLocalized('%d de %B %Y, a las %H:%M')}}</h4>
             <img class="barcode" src="{{$charge->payment_method->barcode_url}}" alt="Código de Barras">
             <span>{{$charge->payment_method->reference}}</span>
             <small>En caso de que el escáner no sea capaz de leer el código de barras, escribir la referencia tal como se muestra.</small>
@@ -262,7 +262,7 @@
         </div>
         <div class="table-row color2">
             <div>Fecha y hora</div>
-            <span>{{\Carbon\Carbon::createFromFormat('Y-m-d\TH:i:sP', $charge->operation_date)->formatLocalized('%d de %B de %Y a las %H:%m')}}</span>
+            <span>{{\Carbon\Carbon::createFromFormat('Y-m-d\TH:i:sP', $charge->operation_date)->formatLocalized('%d de %B de %Y a las %H:%M')}}</span>
         </div>
         <div class="table-row color1">
             <div>Correo del cliente</div>
