@@ -14,8 +14,8 @@
             -webkit-print-color-adjust: exact;
         }
         h3 {
-            font-size:25px;
-            margin:15px 0 0 0;
+            font-size:20px;
+            margin:10px 0 0 0;
         }
         h4 {
             font-size:17px;
@@ -90,7 +90,7 @@
         }
         .Big_Bullet span {
             width:100%;
-            height:55px;
+            height:40px;
             display:block;
         }
         .col1 {
