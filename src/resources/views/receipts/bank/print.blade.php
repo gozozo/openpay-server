@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-    <title>Openpay - Dashboard</title>
+    <title>{{config('openpay.app_name')}}</title>
     <link href="/favicon.ico" rel="icon" type="image/x-icon">
     <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon">
     <meta charset="UTF-8">
