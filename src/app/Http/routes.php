@@ -10,9 +10,6 @@
 |
 */
 
-use Illuminate\Support\Facades\Route;
-
-
 if(config('openpay.api')) {
     $attr = ["prefix" => config('openpay.api_route')];
 
@@ -31,4 +28,6 @@ Route::group(["prefix" => 'openpay'], function () {
     Route::get('webhook/code', 'Gozozo\OpenpayServer\Http\Controllers\WebhookController@code')->name('openpay.webhook.code');
     Route::get('payment/store/{id}','Gozozo\OpenpayServer\Http\Controllers\StoreController@storeReceipt')->name('openpay.store');
     Route::get('payment/store/{id}/print','Gozozo\OpenpayServer\Http\Controllers\StoreController@storeReceiptPrint')->name('openpay.store.print');
+    Route::get('payment/bank/{id}','Gozozo\OpenpayServer\Http\Controllers\BankController@bankReceipt')->name('openpay.bank');
+    Route::get('payment/bank/{id}/print','Gozozo\OpenpayServer\Http\Controllers\BankController@bankReceiptPrint')->name('openpay.bank.print');
 });

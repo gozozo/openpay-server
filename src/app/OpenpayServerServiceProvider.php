@@ -18,12 +18,16 @@ class OpenpayServerServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(__DIR__.'/../migrations');
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'openpay');
         $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'openpay');
+
         $this->publishes([
             __DIR__ . '/../config/openpay.php' => config_path('openpay.php')
         ]);
         $this->publishes([
             __DIR__.'/../resources/assets' => public_path('vendor/gozozo/openpay'),
         ], 'public');
+        $this->publishes([
+            __DIR__.'/../resources/views/receipts' => resource_path('views/vendor/openpay/receipts'),
+        ]);
     }
 
     /**

@@ -297,7 +297,6 @@
     </div>
 
     <div class="logos-tiendas">
-
         <ul>
             <li><img src="{{config('openpay.path_resources')}}/seven.png" width="100" height="50"></li>
             <li><img src="{{config('openpay.path_resources')}}/circulok.png" width="100" height="50"></li>
@@ -316,7 +315,7 @@
     <div class="Powered">
         <img src="{{config('openpay.path_resources')}}/powered_openpay.png" alt="Powered by Openpay" width="150">
         <a target="_blank" href="{{route('openpay.store.print',$charge->id)}}">Imprimir</a>
-        <a href="{{route(config('openpay.route_end'))}}">Seguir comprando</a>
+        <a href="{{route(config('openpay.store_redirect'))}}">Seguir comprando</a>
     </div>
 </div>
 <div style="height: 40px; width: 100%; float:left;"></div>

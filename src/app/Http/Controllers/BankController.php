@@ -7,7 +7,7 @@ use Gozozo\OpenpayServer\Openpay;
 use Illuminate\Routing\Controller;
 use OpenpayApi;
 
-class StoreController extends Controller
+class BankController extends Controller
 {
     /**
      * Openpay
@@ -23,28 +23,28 @@ class StoreController extends Controller
         $this->openpay = $openpay;
     }
 
-    public function storeReceipt($id)
+    public function bankReceipt($id)
     {
 
         $charge = Openpay::getCharge($id);
-        if (isset($charge) && $charge->method == Openpay::PAYMENT_METHOD_STORE) {
+        if (isset($charge) && $charge->method == Openpay::PAYMENT_METHOD_BANK_ACCOUNT) {
             $customer = $this->openpay->customers->get($charge->customer_id);
         } else {
             abort(404);
         }
-        return view('openpay::receipts.paynet.index', compact('charge', 'customer'));
+        return view('openpay::receipts.bank.index', compact('charge', 'customer'));
 
     }
 
-    public function storeReceiptPrint($id)
+    public function bankReceiptPrint($id)
     {
 
         $charge = Openpay::getCharge($id);
-        if (isset($charge) && $charge->method == Openpay::PAYMENT_METHOD_STORE) {
+        if (isset($charge) && $charge->method == Openpay::PAYMENT_METHOD_BANK_ACCOUNT) {
             $customer = $this->openpay->customers->get($charge->customer_id);
         } else {
             abort(404);
         }
-        return view('openpay::receipts.paynet.print', compact('charge', 'customer'));
+        return view('openpay::receipts.bank.print', compact('charge', 'customer'));
     }
 }

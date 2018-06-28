@@ -19,6 +19,9 @@ use OpenpayCharge;
 
 class Openpay
 {
+    const PAYMENT_METHOD_BANK_ACCOUNT = 'bank_account';
+    const PAYMENT_METHOD_STORE = 'store';
+
     /**
      * Get instance
      *
