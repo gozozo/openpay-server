@@ -288,7 +288,7 @@
         </div>
         <div class="table-row color2">
             <div>Fecha y hora</div>
-            <span>{{\Carbon\Carbon::createFromFormat('Y-m-d\TH:i:sP', $charge->operation_date)->formatLocalized('%d de %B de %Y a las %H:%m')}}</span>
+            <span>{{\Carbon\Carbon::createFromFormat('Y-m-d\TH:i:sP', $charge->operation_date)->formatLocalized('%d de %B de %Y a las %H:%M')}}</span>
         </div>
         <div class="table-row color2" style="display:none">
             <div>&nbsp;</div>
