@@ -242,7 +242,7 @@
         </div>
         <div class="col2">
             <h2>Total a pagar</h2>
-            <h1>${{number_format($charge->amount,0)}}<span>.{{explode('.', number_format($charge->amount,2))[1]}}</span><small> {{$charge->currency}}</small></h1>
+            <h1>${{explode('.', number_format($charge->amount,2))[0]}}<span>.{{explode('.', number_format($charge->amount,2))[1]}}</span><small> {{$charge->currency}}</small></h1>
             <h2 class="S-margin">+8 pesos por comisión</h2>
         </div>
     </div>
