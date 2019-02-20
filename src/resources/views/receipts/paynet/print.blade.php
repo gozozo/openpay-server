@@ -7,15 +7,14 @@
     <meta charset="UTF-8">
     <style>
         /* CSS Document */
-
+        /* CSS Document */
         body {
             margin:0;
             font-family:Helvetica, Arial, sans-serf;
-            -webkit-print-color-adjust: exact;
         }
         h3 {
-            font-size:20px;
-            margin:10px 0 0 0;
+            font-size:25px;
+            margin:15px 0 0 0;
         }
         h4 {
             font-size:17px;
@@ -24,7 +23,7 @@
         .whitepaper {
             background-color:#FFF;
             width:812px;
-            height: 90%;
+            height: 1123px;
             margin:0 auto;
             border:#D8D8D8 1px solid;
         }
@@ -33,16 +32,6 @@
             float:left;
             width:84%;
             margin:4% 8% 4% 8%;
-        }
-        .Logo_empresa div {
-            font-size:30px;
-            font-weight:lighter;
-            display:block;
-            width:220px;
-            height: 57.2px;
-            float:left;
-        //margin:10px 15px 0 0;
-            text-align: center;
         }
         .Logo_empresa img {
             width:220px;
@@ -63,22 +52,17 @@
             width:130px;
             float:left;
         }
-        .barcode {
-            width:300px;
-            height: 61px;
-        }
         .Data {
             width:100%;
             clear:both;
             float:left;
         }
         .DT-margin {
-            margin:2px 0;
+            margin:15px 0;
             display:block;
             float:left;
             width:100%;
             clear:both;
-            border:#FF0000 0px solid;
         }
         .Big_Bullet {
             width:40px;
@@ -90,7 +74,7 @@
         }
         .Big_Bullet span {
             width:100%;
-            height:40px;
+            height:55px;
             display:block;
         }
         .col1 {
@@ -135,7 +119,7 @@
         }
 
         .Table-Data {
-            margin:2px 0 0 0;
+            margin:20px 0 0 0;
             clear:both;
             width:100%;
             display:block;
@@ -144,7 +128,7 @@
         .table-row {
             float:left;
             width:83%;
-            padding:0 8.0%;
+            padding:0 8.5%;
         }
         .table-row div {
             float:left;
@@ -204,9 +188,29 @@
 
         .Powered {
             width:100%;
-            height: 20px;
             float:left;
-            margin-top:10px;
+            margin-top:18px;
+        }
+        .Powered img {
+            margin-left:65px;
+            margin-right:290px;
+        }
+        .Powered a {
+            border-radius:6px;
+            background-color:#0075F0;
+            padding:7px 13px;
+            color:#FFF;
+            font-size:16px;
+            font-weight:normal;
+            text-decoration:none;
+            margin:10px;
+        }
+        .Powered a:hover {
+            background-color:#009BFF;
+        }
+
+        .note {
+            font-size:12px;
         }
 
     </style>
@@ -237,13 +241,13 @@
             <h3>Fecha límite de pago</h3>
             <h4>{{$charge->due_date==null?'No aplica' :\Carbon\Carbon::createFromFormat('Y-m-d\TH:i:sP', $charge->due_date)->formatLocalized('%d de %B %Y, a las %H:%M')}}</h4>
             <img class="barcode" src="{{$charge->payment_method->barcode_url}}" alt="Código de Barras">
-            <span>{{$charge->payment_method->reference}}</span>
+            <center><span>{{$charge->payment_method->reference}}</span></center>
             <small>En caso de que el escáner no sea capaz de leer el código de barras, escribir la referencia tal como se muestra.</small>
         </div>
         <div class="col2">
             <h2>Total a pagar</h2>
             <h1>${{explode('.', number_format($charge->amount,2))[0]}}<span>.{{explode('.', number_format($charge->amount,2))[1]}}</span><small> {{$charge->currency}}</small></h1>
-            <h2 class="S-margin">+8 pesos por comisión</h2>
+            <span class="note">La comisión por recepción del pago varía de acuerdo a los términos y condiciones que cada cadena comercial establece.</span>
         </div>
     </div>
     <div class="DT-margin"></div>
@@ -287,7 +291,7 @@
             <ol>
                 <li>Acude a cualquier tienda afiliada</li>
                 <li>Entrega al cajero el código de barras y menciona que realizarás un pago de servicio Paynet</li>
-                <li>Realizar el pago en efectivo por {{number_format($charge->amount,2)}} {{$charge->currency}} (más $8 pesos por comisión)</li>
+                <li>Realizar el pago en efectivo por {{number_format($charge->amount,2)}} {{$charge->currency}}</li>
                 <li>Conserva el ticket para cualquier aclaración</li>
             </ol>
             <small>Si tienes dudas comunícate a {{config('openpay.app_name')}} al teléfono {{config('openpay.app_phone')}} o al correo {{config('openpay.app_support_email')}}</small>
@@ -299,7 +303,7 @@
                 <li>Seleccionar Paynet</li>
                 <li>Escanear el código de barras o ingresar el núm. de referencia</li>
                 <li>Ingresa la cantidad total a pagar</li>
-                <li>Cobrar al cliente el monto total más la comisión de $8 pesos</li>
+                <li>Cobrar al cliente el monto total más la comisión</li>
                 <li>Confirmar la transacción y entregar el ticket al cliente</li>
             </ol>
             <small>Para cualquier duda sobre como cobrar, por favor llamar al teléfono (55) 5351 7371 en un horario de
