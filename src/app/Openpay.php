@@ -77,6 +77,20 @@ class Openpay
     }
 
     /**
+     * Get all suscripciones from a customer.   Check documentation on https://www.openpay.mx/docs/api/#listado-de-suscripciones
+     *
+     * @param int $external_id      External id
+     * @param array $filter         Data filter - example: array('creation[gte]' => '2013-01-01','creation[lte]' => '2013-12-31','offset' => 0,'limit' => 5);
+     * @return array
+     */
+    public static function allSuscripcionesFromCustomer($external_id, array $filter = [])
+    {
+        $openpayReference = OpenpayReferenceModel::where('user_id', $external_id)->first();
+        $customer = Openpay::instance()->customers->get($openpayReference->openpay_id);
+        return $customer->subscriptions->getList($filter);
+    }
+
+    /**
      * Add card to customer.    Check documentation on https://www.openpay.mx/docs/api/?php#crear-una-tarjeta
      * 
      * @param int $external_id      External id
