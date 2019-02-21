@@ -46,48 +46,61 @@ class Openpay
     /**
      * Create customer charge. This type of charge requires a saved card or a previously generated token.   Check documentation on https://www.openpay.mx/docs/api/#con-id-de-tarjeta-o-token
      *
-     * @param $external_id
+     * @param $externalId
      * @param Charge $charge
      *
      * @return OpenpayCharge
      */
 
-    public static function createCustomerCharge($external_id, Charge $charge)
+    public static function createCustomerCharge($externalId, Charge $charge)
     {
-        $openpayReference = OpenpayReferenceModel::where('user_id', $external_id)->first();
+        $openpayReference = OpenpayReferenceModel::where('user_id', $externalId)->first();
         $customer = Openpay::instance()->customers->get($openpayReference->openpay_id);
         $charge = $customer->charges->create($charge->toArray());
         return $charge;
     }
 
-    /***********************************************
-     *                 CUSTOMERS
-     **********************************************/
-
     /**
-     * Get all cards from a customer.   Check documentation on https://www.openpay.mx/docs/api/#listado-de-tarjetas
+     * Get cards from a customer.   Check documentation on https://www.openpay.mx/docs/api/#listado-de-tarjetas
      *
-     * @param int $external_id External id
+     * @param int $externalId External id
      * @param array $filter Data filter - example: array('creation[gte]' => '2013-01-01','creation[lte]' => '2013-12-31','offset' => 0,'limit' => 5);
-     * @return array
+     *
+     * @return \OpenpayCardList
      */
-    public static function allCardsFromCustomer($external_id, array $filter = [])
+    public static function getCardsFromCustomer($externalId, array $filter = [])
     {
-        $openpayReference = OpenpayReferenceModel::where('user_id', $external_id)->first();
+        $openpayReference = OpenpayReferenceModel::where('user_id', $externalId)->first();
         $customer = Openpay::instance()->customers->get($openpayReference->openpay_id);
         return $customer->cards->getList($filter);
     }
 
     /**
-     * Get all suscripciones from a customer.   Check documentation on https://www.openpay.mx/docs/api/#listado-de-suscripciones
+     * Get cards from a customer.   Check documentation on https://www.openpay.mx/docs/api/#listado-de-tarjetas
      *
-     * @param int $external_id External id
+     * @param int $externalId External id
      * @param array $filter Data filter - example: array('creation[gte]' => '2013-01-01','creation[lte]' => '2013-12-31','offset' => 0,'limit' => 5);
+     *
+     * @return \OpenpayCard
+     */
+    public static function getCardFromCustomer($externalId, $cardId)
+    {
+        $openpayReference = OpenpayReferenceModel::where('user_id', $externalId)->first();
+        $customer = Openpay::instance()->customers->get($openpayReference->openpay_id);
+        return $customer->cards->get($cardId);
+    }
+
+    /**
+     * Get suscripciones from a customer.   Check documentation on https://www.openpay.mx/docs/api/#listado-de-suscripciones
+     *
+     * @param int $externalId External id
+     * @param array $filter Data filter - example: array('creation[gte]' => '2013-01-01','creation[lte]' => '2013-12-31','offset' => 0,'limit' => 5);
+     *
      * @return \OpenpaySubscriptionList
      */
-    public static function allSuscripcionesFromCustomer($external_id, array $filter = [])
+    public static function getSuscripcionesFromCustomer($externalId, array $filter = [])
     {
-        $openpayReference = OpenpayReferenceModel::where('user_id', $external_id)->first();
+        $openpayReference = OpenpayReferenceModel::where('user_id', $externalId)->first();
         $customer = Openpay::instance()->customers->get($openpayReference->openpay_id);
         return $customer->subscriptions->getList($filter);
     }
@@ -95,13 +108,14 @@ class Openpay
     /**
      * Add card to customer.    Check documentation on https://www.openpay.mx/docs/api/?php#crear-una-tarjeta
      *
-     * @param int $external_id External id
+     * @param int $externalId External id
      * @param Card $creditCard Card
+     *
      * @return \OpenpayCard
      */
-    public static function addCardToCustomer($external_id, Card $creditCard)
+    public static function addCardToCustomer($externalId, Card $creditCard)
     {
-        $openpayReference = OpenpayReferenceModel::where('user_id', $external_id)->first();
+        $openpayReference = OpenpayReferenceModel::where('user_id', $externalId)->first();
         $customer = Openpay::instance()->customers->get($openpayReference->openpay_id);
         return $customer->cards->add($creditCard->toArray());
     }
@@ -109,17 +123,32 @@ class Openpay
     /**
      * Add card to customer.    Check documentation on https://www.openpay.mx/docs/api/?php#crear-una-tarjeta-con-token
      *
-     * @param int $external_id External id
+     * @param int $externalId External id
      * @param CardToken $cardToken CardToken
+     *
      * @return \OpenpayCard
      */
-    public static function addCardTokenToCustomer($external_id, CardToken $cardToken)
+    public static function addCardTokenToCustomer($externalId, CardToken $cardToken)
     {
-        $openpayReference = OpenpayReferenceModel::where('user_id', $external_id)->first();
+        $openpayReference = OpenpayReferenceModel::where('user_id', $externalId)->first();
         $customer = Openpay::instance()->customers->get($openpayReference->openpay_id);
         return $customer->cards->add($cardToken->toArray());
     }
 
+
+    /**
+     * Remove card from customer.    Check documentation on https://www.openpay.mx/docs/api/?php#crear-una-tarjeta
+     *
+     * @param int $externalId External id
+     * @param Card $creditCard Card
+     *
+     * @throws OpenpayApiError|OpenpayApiTransactionError|OpenpayApiRequestError
+     */
+    public static function removeCardFromCustomer($externalId, $cardId)
+    {
+        $card = self::getCardFromCustomer($externalId, $cardId);
+        $card->delete();
+    }
 
     /***********************************************
      *                 PAY ORDER
@@ -175,13 +204,13 @@ class Openpay
     /**
      * Create payment via a store.    Check documentation on https://www.openpay.mx/docs/api/?php#cargo-en-tienda
      *
-     * @param $external_id
+     * @param $externalId
      * @param StorePayment $storePayment
      * @return \OpenpayCharge
      */
-    public static function createStorePayment($external_id, StorePayment $storePayment)
+    public static function createStorePayment($externalId, StorePayment $storePayment)
     {
-        $openpayReference = OpenpayReferenceModel::where('user_id', $external_id)->first();
+        $openpayReference = OpenpayReferenceModel::where('user_id', $externalId)->first();
         $customer = Openpay::instance()->customers->get($openpayReference->openpay_id);
         $charge = $customer->charges->create($storePayment->toArray());
         return $charge;
@@ -194,13 +223,13 @@ class Openpay
     /**
      * Create charge via Bank.    Check documentation on https://www.openpay.mx/docs/api/?php#cargo-en-tienda
      *
-     * @param $external_id
+     * @param $externalId
      * @param BankPayment $bankPayment
      * @return \OpenpayCharge
      */
-    public static function createBankPayment($external_id, BankPayment $bankPayment)
+    public static function createBankPayment($externalId, BankPayment $bankPayment)
     {
-        $openpayReference = OpenpayReferenceModel::where('user_id', $external_id)->first();
+        $openpayReference = OpenpayReferenceModel::where('user_id', $externalId)->first();
         $customer = Openpay::instance()->customers->get($openpayReference->openpay_id);
         $charge = $customer->charges->create($bankPayment->toArray());
         return $charge;
@@ -220,6 +249,7 @@ class Openpay
     {
         return Openpay::instance()->plans->getList($filter);;
     }
+
     /**
      * Get plan by ID.   Check documentation on https://www.openpay.mx/docs/api/?php#obtener-un-plan
      *
@@ -237,13 +267,13 @@ class Openpay
     /**
      * Add subscriptions to customer with card id.    Check documentation on https://www.openpay.mx/docs/api/?php#crear-una-nueva-suscripci-n
      *
-     * @param int $external_id External id
+     * @param int $externalId External id
      * @param Subscription $subscription
      * @return \OpenpaySubscription
      */
-    public static function addSubscriptionToCustomerWithCardId($external_id, Subscription $subscription)
+    public static function addSubscriptionToCustomerWithCardId($externalId, Subscription $subscription)
     {
-        $openpayReference = OpenpayReferenceModel::where('user_id', $external_id)->first();
+        $openpayReference = OpenpayReferenceModel::where('user_id', $externalId)->first();
         $customer = Openpay::instance()->customers->get($openpayReference->openpay_id);
         return $customer->subscriptions->add($subscription->toArray());
     }
