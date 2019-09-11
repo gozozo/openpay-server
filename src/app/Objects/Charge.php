@@ -28,5 +28,6 @@ class Charge
     public $use_card_points;
     public $send_email;
     public $redirect_url;
+    public $use_3d_secure;
 
 }
