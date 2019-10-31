@@ -15,14 +15,18 @@ class WebhookController extends Controller
             $webhook->event_date = Carbon::parse($request->input('event_date'));
             $webhook->verification_code = $request->input('verification_code');
             $webhook->save();
-        }else {
-            $method = config('openpay.webhook.'.$request->input('type'));
-            if (isset($method)) {
-                call_user_func($method, $request);
-            }
+            return 'The verification was saved';
         }
-        return "ok";
+        $type = $request->input('type');
+
+        $method = config('openpay.webhook.'.$type);
+        if (isset($method)) {
+            $response = call_user_func($method, $request);
+            return $response == null ? 'ok' : $response;
+        }
+        return 'Method '.$type.' is not configured';
     }
+
     public function code(Request $request){
         $webhook = OpenpayVerificationWebhookModel::get()->last();
         if ($webhook != null){
