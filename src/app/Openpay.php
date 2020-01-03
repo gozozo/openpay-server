@@ -16,6 +16,8 @@ use Gozozo\OpenpayServer\Objects\PayOrder;
 use Gozozo\OpenpayServer\Objects\StorePayment;
 use Gozozo\OpenpayServer\Objects\Subscription;
 use OpenpayApi;
+use OpenpayApiRequestError;
+use OpenpayApiTransactionError;
 use OpenpayCharge;
 
 class Openpay
@@ -50,6 +52,7 @@ class Openpay
      * @param Charge $charge
      *
      * @return OpenpayCharge
+     * @throws OpenpayApiTransactionError|OpenpayApiRequestError
      */
 
     public static function createCustomerCharge($externalId, Charge $charge)
@@ -158,7 +161,9 @@ class Openpay
      * Create pay order.    Check documentation on https://www.openpay.mx/docs/api/?php#con-terminal-virtual
      *
      * @param PayOrder $payOrder
+     *
      * @return OpenpayCharge
+     * @throws OpenpayApiTransactionError|OpenpayApiRequestError
      */
     public static function createPayOrder(PayOrder $payOrder)
     {
@@ -188,6 +193,7 @@ class Openpay
      * Get charge  to customer.    Check documentation on https://www.openpay.mx/docs/api/?php#crear-una-tarjeta
      *
      * @param string $transaction_id Id Transaction;
+     *
      * @return \OpenpayCharge
      * */
     public static function getCharge($transaction_id)
@@ -206,7 +212,9 @@ class Openpay
      *
      * @param $externalId
      * @param StorePayment $storePayment
+     *
      * @return \OpenpayCharge
+     * @throws OpenpayApiTransactionError|OpenpayApiRequestError
      */
     public static function createStorePayment($externalId, StorePayment $storePayment)
     {
@@ -225,7 +233,9 @@ class Openpay
      *
      * @param $externalId
      * @param BankPayment $bankPayment
+     *
      * @return \OpenpayCharge
+     * @throws OpenpayApiTransactionError|OpenpayApiRequestError
      */
     public static function createBankPayment($externalId, BankPayment $bankPayment)
     {
